@@ -1,0 +1,167 @@
+secure file storage system in Next.js using AWS S3 for file storage and DynamoDB for
+metadata, with user authentication via AWS IAM and DynamoDB, session management, and
+file sharing capabilities. Below is a step-by-step, detailed system design, including data
+models, routes, and functionalities.
+
+Architecture Components
+● Frontend: Next.js application
+● Backend/API: Next.js API routes (serverless functions)
+● Storage: Single S3 bucket (each user has a folder)
+● Database: DynamoDB (stores file metadata and sharing info)
+● Authentication: AWS IAM (via Cognito or Amplify), session tokens, DynamoDB for
+user/session data
+● Naming Convention: camelCase throughout code
+Step-by-Step Implementation Plan
+
+1. AWS Setup
+● Create an S3 bucket for file storage.
+● Create a DynamoDB table for file metadata and sharing info.
+● Set up AWS IAM roles and users with least-privilege access for S3 and DynamoDB.
+● Configure AWS Cognito or Amplify Auth for user management and secure
+authentication6.
+2. Next.js Project Initialization
+● Initialize a Next.js app.
+● Install AWS SDK, Amplify, and DynamoDB client libraries76.
+● Configure environment variables for AWS credentials and resources.
+3. Authentication & Session Management
+● Use AWS Amplify Auth or Cognito for user sign-up/sign-in flows6.
+● Store user sessions securely (JWT or Amplify-managed tokens).
+● Store user profiles in DynamoDB if needed (userId, email, etc.).
+● Restrict S3 access per user using IAM policies or signed URLs.
+4. File Upload & Storage
+● When a user uploads a file:
+
+● Generate a pre-signed S3 URL for the user’s folder
+(bucket/userId/filename)57.
+● Upload the file directly from the frontend to S3 using the pre-signed URL.
+● Store metadata in DynamoDB (see data model below)5.
+
+5. Metadata Storage in DynamoDB
+● After successful upload, save metadata:
+● userId (owner)
+● fileId (UUID)
+● fileName
+● s3Key (S3 object key)
+● size
+● mimeType
+● createdAt
+● sharedWith (array of userIds)
+● isReadOnly (always true after upload)
+
+6. File Sharing
+● To share a file:
+● Update the sharedWith array in the file’s DynamoDB record.
+● Only users in sharedWith or the owner can access the file.
+
+7. File Access
+● For file access (view/download):
+● Backend checks if the requesting user is owner or in sharedWith.
+● If allowed, generate a pre-signed S3 URL for temporary access.
+
+8. Read-Only Enforcement
+● Once uploaded, files cannot be edited (enforced in UI and backend).
+● Only allow delete or share actions.
+Data Models (DynamoDB, camelCase)
+User Table (if needed):
+
+Attribute Type Description
+
+userId String Primary Key
+
+email String User email
+
+createdAt String Timestamp
+
+File Metadata Table:
+Attribute Type Description
+
+fileId String Primary Key (UUID)
+
+userId String Owner userId (partition key)
+
+fileName String Original file name
+
+s3Key String S3 object key (e.g., userId/file)
+
+size Number File size in bytes
+
+mimeType String MIME type
+
+createdAt String Upload timestamp
+
+sharedWith List Array of userIds with access
+
+isReadOnly Boolean Always true after upload
+
+API Routes (Next.js API Routes)
+
+Route Method Auth? Description
+
+/api/auth/login POST No Authenticate user (via Cognito/Amplify)
+
+/api/auth/logout POST Yes Logout user
+
+/api/files/presign-upload POST Yes Get S3 pre-signed URL for upload
+
+/api/files/metadata POST Yes Save file metadata to DynamoDB
+
+/api/files/list GET Yes List user's files and shared files
+
+/api/files/download GET Yes Get pre-signed URL for download
+
+/api/files/share POST Yes Share file with another user
+
+/api/files/delete DELETE Yes Delete file (owner only)
+
+Functionalities
+● User Authentication: Secure login/signup with AWS IAM/Cognito/Amplify6.
+● Session Management: Secure tokens (JWT or Amplify session), stored in HTTP-only
+cookies.
+● File Upload: Direct to S3 using pre-signed URLs, metadata saved in DynamoDB57.
+● File Listing: Fetch from DynamoDB, show files owned and shared with user.
+● File Download: Pre-signed S3 URL, access controlled by DynamoDB sharedWith.
+● File Sharing: Update sharedWith in DynamoDB, only owner can share.
+● Read-Only: No edit after upload, enforced in backend and UI.
+● User Folders: S3 key structure is bucket/userId/filename.
+
+Naming Conventions
+● Use camelCase for all variable, function, and attribute names.
+Implementation Steps (Without Code)
+1. AWS Setup: Create S3 bucket, DynamoDB table, IAM roles, and configure
+Cognito/Amplify.
+2. Next.js Setup: Initialize project, install AWS SDK, Amplify, DynamoDB client.
+3. Auth Integration: Set up Amplify Auth or Cognito in Next.js, configure secure session
+handling68.
+4. API Routes: Create Next.js API routes for file operations, authentication, and sharing.
+5. Frontend Integration: Build React components for login, file upload, list, share, and
+download.
+6. S3 Integration: Use pre-signed URLs for uploads/downloads, ensure each user’s files
+are in their folder57.
+7. DynamoDB Integration: Store and query file metadata, enforce access control and
+sharing logic.
+8. Security: Use IAM policies or Amplify Auth to restrict S3 access; validate all requests
+in backend.
+9. Testing: Test all flows (auth, upload, share, download, access control).
+10. Deployment: Deploy Next.js app (Vercel, AWS, or similar), ensure environment
+variables are set for AWS credentials and resources27.
+Summary Table: User Flow
+
+Step Action AWS Service Next.js Role
+
+User logs in Auth via Cognito/Amplify Cognito/Amplify Auth UI/API
+
+Upload file Get pre-signed URL, upload to S3 S3 API route, frontend
+
+Save
+metadata
+
+Store file info in DynamoDB DynamoDB API route
+
+List files Query DynamoDB for owned/shared files DynamoDB API route, frontend
+
+Download file Get pre-signed URL if authorized S3, DynamoDB API route, frontend
+
+Share file Update sharedWith in DynamoDB DynamoDB API route, frontend
+This design ensures a secure, scalable, and maintainable file system using Next.js, S3,
+DynamoDB, and AWS authentication, with all requirements addressed and a clear path for
+implementation367.

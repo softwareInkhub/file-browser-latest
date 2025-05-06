@@ -1,0 +1,44 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.799.0",
+    "@aws-sdk/client-s3": "^3.802.0",
+    "@aws-sdk/lib-dynamodb": "^3.799.0",
+    "@aws-sdk/s3-request-presigner": "^3.802.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "autoprefixer": "^10.4.14",
+    "aws-sdk": "^2.1692.0",
+    "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
+    "date-fns": "^4.1.0",
+    "drizzle-kit": "^0.31.1",
+    "drizzle-orm": "^0.43.1",
+    "formidable": "^3.5.4",
+    "jsonwebtoken": "^9.0.2",
+    "next": "^15.3.1",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.15.6",
+    "postcss": "^8.4.24",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^3.3.0",
+    "uuid": "^11.1.0"
+  }
+}

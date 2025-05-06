@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.loading-spinner {
+  @apply w-8 h-8 border-4 border-gray-300 rounded-full border-t-blue-500 animate-spin;
+}
+
+.btn-primary {
+  @apply py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300;
+}
+
+.btn-secondary {
+  @apply py-2 px-4 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 transition duration-300;
+}
+
+.btn-danger {
+  @apply py-2 px-4 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75 transition duration-300;
+}
+
+.input-field {
+  @apply mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    width: 100vw;
+    overflow-x: hidden;
+  }
+}
