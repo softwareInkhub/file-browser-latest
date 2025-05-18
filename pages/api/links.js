@@ -39,6 +39,12 @@ export default withAuth(async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
+      if (!userId) {
+        console.error('No userId found in request');
+        return res.status(400).json({ error: 'User ID is required' });
+      }
+
+      console.log('Fetching links for userId:', userId);
       const command = new ScanCommand({
         TableName: linksTable,
         FilterExpression: 'userId = :userId',

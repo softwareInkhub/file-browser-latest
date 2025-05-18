@@ -34,7 +34,11 @@ export default withAuth(async function handler(req, res) {
         Object.keys(files.ownedFiles[0]) : 'No files found'
     });
     
-    return res.status(200).json(files || { ownedFiles: [], sharedFiles: [] });
+    // Always return the correct structure
+    return res.status(200).json({
+      ownedFiles: Array.isArray(files?.ownedFiles) ? files.ownedFiles : [],
+      sharedFiles: Array.isArray(files?.sharedFiles) ? files.sharedFiles : []
+    });
   } catch (error) {
     console.error('List files error:', error);
     return res.status(500).json({ error: 'Failed to list files' });

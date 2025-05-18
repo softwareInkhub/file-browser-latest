@@ -40,8 +40,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Move the file (passing null destinationFolderId is valid - means moving to root)
-    const result = await moveFile(fileId, destinationFolderId, user.userId);
+    // Move the file (passing 'root' as destinationFolderId means moving to root)
+    const result = await moveFile(fileId, destinationFolderId ? String(destinationFolderId) : 'root', user.userId);
 
     if (!result.success) {
       return res.status(400).json({ error: result.error });
