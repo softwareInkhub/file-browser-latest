@@ -130,7 +130,7 @@ export default function FileList({ files, refreshFiles, isSharedView = false, is
     // Filter by search term and parentFolderId, and separate files from folders
     const filteredItems = items.filter(item => 
       // Only show items in the current folder
-      (parentFolderId ? item.parentFolderId === parentFolderId : !item.parentFolderId) &&
+      (parentFolderId ? item.parentFolderId === parentFolderId : item.parentFolderId === 'root') &&
       item.fileName &&
       item.fileName.toLowerCase().includes(searchTerm.toLowerCase())
     );

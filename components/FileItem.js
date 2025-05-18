@@ -243,7 +243,7 @@ export default function FileItem({ file, viewMode, isOwner = true, refreshFiles 
         credentials: 'include',  // Include cookies for authentication
         body: JSON.stringify({
           fileId: file.fileId,
-          destinationFolderId: destinationFolderId === undefined ? null : destinationFolderId
+          destinationFolderId: destinationFolderId ? String(destinationFolderId) : 'root'
         })
       });
       

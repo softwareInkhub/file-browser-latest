@@ -155,7 +155,7 @@ export default withAuth(async function handler(req, res) {
     console.log('File uploaded successfully to S3');
     
     // Get parentFolderId if it exists in the form data
-    let parentFolderId = null;
+    let parentFolderId = 'root'; // Default to 'root' instead of null
     
     // Check fields format - it could be an object with a value property or directly the value
     if (fields.parentFolderId) {
@@ -179,7 +179,7 @@ export default withAuth(async function handler(req, res) {
       size: file.size,
       mimeType: file.mimetype || 'application/octet-stream',
       userId,
-      parentFolderId, // Add the parentFolderId
+      parentFolderId, // This will now always be a string
       sharedWith: [],
       createdAt: new Date().toISOString(),
     };
